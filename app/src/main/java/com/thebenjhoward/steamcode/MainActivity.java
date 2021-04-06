@@ -11,12 +11,15 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    public void onButtonClick(View view) {
+    public void onPermissionsButtonClick(View view) {
         if (!isNotificationServiceEnabled()) {
             AlertDialog d = buildNotificationServiceAlertDialog();
             d.show();
@@ -46,6 +49,13 @@ public class MainActivity extends AppCompatActivity {
         if (view.getContext().checkSelfPermission("android.permission.SEND_SMS") == PackageManager.PERMISSION_DENIED) {
             requestPermissions(new String[] { "android.permission.SEND_SMS"}, PERMISSION_REQUEST_CODE);
         }
+    }
+
+    public void onPhoneNumberButtonClick(View view) {
+        TextView phoneNumber = findViewById(R.id.editTextPhone3);
+        String num = phoneNumber.getText().toString();
+        SharedPreferences prefs = getSharedPreferences("phoneNumber", Context.MODE_PRIVATE);
+        prefs.edit().putString("num", num);
     }
 
     public boolean isNotificationServiceEnabled() {

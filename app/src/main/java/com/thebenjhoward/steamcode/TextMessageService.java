@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.telephony.SmsManager;
 import android.util.Log;
@@ -52,7 +53,10 @@ public class TextMessageService extends Service {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.i(TAG, "Received: " + intent.getStringExtra("Code"));
-            TextMessageService.this.sendSms("15039134861", intent.getStringExtra("Code"));
+            SharedPreferences prefs = getSharedPreferences("phoneNumber", Context.MODE_PRIVATE);
+            String num = prefs.getString("num", "");
+            if(!num.equals(""))
+                TextMessageService.this.sendSms(num, intent.getStringExtra("Code"));
         }
 
     }
